@@ -36,11 +36,11 @@
         result (.submit ^ExecutorService t-pool
                         ^Callable task)]
     (if (some? next-unit)
-      (do-one next-unit result)
+      (run-one next-unit result)
       result)))
 
 (defn run [unit inputs]
-  (for [result (map (partial do-one unit) inputs)]
+  (for [result (map (partial run-one unit) inputs)]
     (.get result)))
 
 (defn create [& [unit-spec & more]]
@@ -50,4 +50,4 @@
 
 (defn stop [{:keys [t-pool next-unit]}]
   (.shutdownNow t-pool)
-  (when next-unit (stop-unit next-unit)))
+  (when next-unit (stop next-unit)))
